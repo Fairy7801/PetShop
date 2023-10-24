@@ -1,8 +1,10 @@
-package com.example.petshop;
+package com.example.petshop.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.petshop.R;
 
 public class MainActivity extends AppCompatActivity {
 
