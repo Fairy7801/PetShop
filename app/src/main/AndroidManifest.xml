@@ -13,6 +13,33 @@
         android:theme="@style/Theme.PetShop"
         tools:targetApi="31">
         <activity
+            android:name=".activity.SPchitietActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.GiaoDichActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.DangNhapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.DangKyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.Chat"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ActivityGiaodich"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ActivitySPchitiet"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ActivityDangKy"
+            android:exported="false" />
+        <activity
+            android:name=".activity.activity_dangnhap"
+            android:exported="false" />
+        <activity
             android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
