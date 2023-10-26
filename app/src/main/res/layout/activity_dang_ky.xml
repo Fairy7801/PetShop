@@ -12,7 +12,8 @@ tools:context=".activity.DangKyActivity">
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:scrollbars="vertical">
+    android:scrollbars="vertical"
+    android:layout_marginTop="100dp">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -87,7 +88,7 @@ tools:context=".activity.DangKyActivity">
                 android:layout_height="match_parent"
                 android:backgroundTint="@color/cam"
                 android:ems="10"
-                android:hint="Nhập Lại Mật Khẩu"
+                android:hint="@string/nhaplaimatkhau"
                 android:inputType="textPassword"
                 android:text=""
                 android:textColor="@color/cam"

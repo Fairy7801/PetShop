@@ -12,7 +12,8 @@ tools:context=".activity.DangNhapActivity">
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:scrollbars="vertical">
+    android:scrollbars="vertical"
+    android:layout_marginTop="100dp">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -123,50 +124,50 @@ tools:context=".activity.DangNhapActivity">
         android:textColor="#F05123"
         android:textSize="14sp" />
 
-    <Button
-        android:id="@+id/btnLoginPhone"
-        android:layout_width="264dp"
-        android:layout_height="38dp"
-        android:layout_gravity="center"
-        android:background="@drawable/border_item"
-        android:drawableLeft="@drawable/icon_phone"
-        android:gravity="center"
-        android:text="@string/loginwithphone"
-        android:textAllCaps="false"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+<!--    <Button-->
+<!--        android:id="@+id/btnLoginPhone"-->
+<!--        android:layout_width="264dp"-->
+<!--        android:layout_height="38dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:background="@drawable/border_item"-->
+<!--        android:drawableLeft="@drawable/icon_phone"-->
+<!--        android:gravity="center"-->
+<!--        android:text="@string/loginwithphone"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textStyle="bold" />-->
 
-    <Button
-        android:id="@+id/btnLoginGoogle"
-        android:layout_width="264dp"
-        android:layout_height="38dp"
-        android:layout_gravity="center"
-        android:background="@drawable/border_item"
-        android:drawableLeft="@drawable/icon_google"
-        android:paddingRight="30dp"
-        android:text="@string/loginwithgoogle"
-        android:textAllCaps="false"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+<!--    <Button-->
+<!--        android:id="@+id/btnLoginGoogle"-->
+<!--        android:layout_width="264dp"-->
+<!--        android:layout_height="38dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:background="@drawable/border_item"-->
+<!--        android:drawableLeft="@drawable/icon_google"-->
+<!--        android:paddingRight="30dp"-->
+<!--        android:text="@string/loginwithgoogle"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textStyle="bold" />-->
 
-    <Button
-        android:id="@+id/btnLoginFacebook"
-        android:layout_width="264dp"
-        android:layout_height="38dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/border_item"
-        android:drawableLeft="@drawable/icon_facebook"
-        android:paddingTop="10dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="10dp"
-        android:text="@string/loginwithfacebook"
-        android:textAllCaps="false"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+<!--    <Button-->
+<!--        android:id="@+id/btnLoginFacebook"-->
+<!--        android:layout_width="264dp"-->
+<!--        android:layout_height="38dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginBottom="32dp"-->
+<!--        android:background="@drawable/border_item"-->
+<!--        android:drawableLeft="@drawable/icon_facebook"-->
+<!--        android:paddingTop="10dp"-->
+<!--        android:paddingRight="20dp"-->
+<!--        android:paddingBottom="10dp"-->
+<!--        android:text="@string/loginwithfacebook"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textStyle="bold" />-->
 
 </LinearLayout>
 

@@ -1,66 +1,194 @@
 package com.example.petshop.fragment;
 
+import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 
 import com.example.petshop.R;
+import com.example.petshop.model.HDCT;
+import com.example.petshop.model.Order;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentThongKeNgay#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class FragmentThongKeNgay extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    BarChart thongkengay;
+    String ngay;
+    ArrayList<HDCT> arrayList;
+    ArrayList<HDCT> arrayListHDCT;
+    FirebaseUser firebaseUser;
+    Button btnngaydau, btnngaycuoi;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FragmentThongKeNgay() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentThongKeNgay.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentThongKeNgay newInstance(String param1, String param2) {
-        FragmentThongKeNgay fragment = new FragmentThongKeNgay();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_thong_ke_ngay, container, false);
+        thongkengay = view.findViewById(R.id.thongkengay);
+        btnngaydau = view.findViewById(R.id.btnngaydau);
+        btnngaycuoi = view.findViewById(R.id.btnngaycuoi);
+        String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        ngay = currentDate.substring(0, 2);
+        arrayListHDCT = new ArrayList<>();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        btnngaydau.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        calendar.set(year, month, dayOfMonth);
+                        String date = simpleDateFormat.format(calendar.getTime());
+                        btnngaydau.setText(date);
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            }
+        });
+        btnngaycuoi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar calendar = Calendar.getInstance();
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        calendar.set(year, month, dayOfMonth);
+                        String date = simpleDateFormat.format(calendar.getTime());
+                        btnngaycuoi.setText(date);
+                        String ngaydau1 = btnngaydau.getText().toString().trim();
+                        DatabaseReference database = FirebaseDatabase.getInstance().getReference("HDCT");
+                        database.orderByChild("ngay").startAt(ngaydau1).endAt(date).addListenerForSingleValueEvent(new ValueEventListener() {
+                            ArrayList<Order> orderArrayList3 = new ArrayList<>();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_thong_ke_ngay, container, false);
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                arrayListHDCT.clear();
+                                String uidstore = "";
+                                ArrayList<Order> orderArrayList = new ArrayList<>();
+                                orderArrayList.clear();
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    HDCT hdct = dataSnapshot.getValue(HDCT.class);
+                                    arrayListHDCT.add(hdct);
+                                    for (int i = 0; i < arrayListHDCT.size(); i++) {
+                                        if (arrayList.get(i).isCheck() == true) {
+                                            orderArrayList.addAll(arrayListHDCT.get(i).getOrderArrayList());
+                                        }
+                                        for (int j = 0; j < orderArrayList.size(); j++) {
+                                            if (orderArrayList.get(j).getStore().getTokenStore().equalsIgnoreCase(firebaseUser.getUid())) {
+                                                uidstore = orderArrayList.get(j).getStore().getTokenStore();
+                                            }
+                                        }
+                                    }
+                                    double tongngay = 0;
+                                    if (hdct.isCheck() == true && uidstore.equalsIgnoreCase(firebaseUser.getUid())) {
+                                        orderArrayList3.addAll(hdct.getOrderArrayList());
+                                        for (Order order : orderArrayList3) {
+                                            tongngay += order.getSoLuong() * order.getProducts().getPrice();
+                                        }
+                                        ArrayList<BarEntry> barEntries = new ArrayList<>();
+                                        barEntries.add(new BarEntry(0, (float) tongngay));
+                                        BarDataSet barDataSet = new BarDataSet(barEntries, "Ngày");
+                                        barDataSet.setColor(Color.RED);
+                                        BarData barData = new BarData();
+                                        barData.setBarWidth(0.20f);
+                                        barData.addDataSet(barDataSet);
+                                        thongkengay.setFitBars(true);
+                                        thongkengay.getDescription().setText("Food App");
+                                        thongkengay.setData(barData);
+                                        thongkengay.animateY(2000);
+                                        thongkengay.invalidate();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            }
+        });
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("HDCT");
+        arrayList = new ArrayList<>();
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            ArrayList<Order> listOrder = new ArrayList<>();
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                arrayList.clear();
+                String uidstore = "";
+                ArrayList<Order> orderArrayList = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    HDCT hdct = dataSnapshot.getValue(HDCT.class);
+                    arrayList.add(hdct);
+                    String ngaytk = hdct.getNgay().substring(0, 2);
+                    for (int i = 0; i < arrayList.size(); i++) {
+                        if (arrayList.get(i).isCheck()) {
+                            orderArrayList.addAll(arrayList.get(i).getOrderArrayList());
+                        }
+                        Log.d("VH11", "onDataChange: " + orderArrayList.toString());
+                        for (int j = 0; j < orderArrayList.size(); j++) {
+                            if (orderArrayList.get(j).getProducts().getTokenStore().equalsIgnoreCase(firebaseUser.getUid())) {
+                                listOrder.add(orderArrayList.get(j));
+                            }
+                        }
+                    }
+                    Log.d("VH11", "onDataChange: " + listOrder.size() + listOrder.toString());
+                    int tongngay = 0;
+                    if (ngay.matches(ngaytk) && hdct.isCheck()) {
+                        for (Order order : listOrder) {
+                            tongngay += order.getSoLuong() * order.getProducts().getPrice();
+                        }
+                        Log.e("VH111", "onDataChange: " + tongngay);
+                        ArrayList<BarEntry> barEntries = new ArrayList<>();
+                        barEntries.add(new BarEntry(0, tongngay));
+                        BarDataSet barDataSet = new BarDataSet(barEntries, "Ngày");
+                        barDataSet.setColor(Color.RED);
+                        BarData barData = new BarData();
+                        barData.setBarWidth(0.20f);
+                        barData.addDataSet(barDataSet);
+                        thongkengay.setFitBars(true);
+                        thongkengay.getDescription().setText("Product App");
+                        thongkengay.setData(barData);
+                        thongkengay.animateY(2000);
+                        thongkengay.invalidate();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+        return view;
     }
 }

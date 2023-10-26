@@ -1,11 +1,11 @@
 plugins {
     id("com.android.application")
-    id ("com.google.gms.google-services")
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.example.petshop"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.petshop"
@@ -31,7 +31,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
@@ -45,8 +45,8 @@ dependencies {
     implementation("com.android.support:preference-v7:28.0.0")
 
 
-    implementation("com.google.firebase:firebase-bom:32.4.0")
-    implementation("com.google.firebase:firebase-analytics")
+    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
     implementation ("com.google.firebase:firebase-auth")
     implementation ("com.google.firebase:firebase-firestore:23.0.0")
     implementation ("com.google.firebase:firebase-messaging:21.1.0")

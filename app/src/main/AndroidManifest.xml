@@ -20,27 +20,6 @@
             android:exported="false" />
         <activity
             android:name=".activity.DangNhapActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.DangKyActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activity.Chat"
-            android:exported="false" />
-        <activity
-            android:name=".activity.ActivityGiaodich"
-            android:exported="false" />
-        <activity
-            android:name=".activity.ActivitySPchitiet"
-            android:exported="false" />
-        <activity
-            android:name=".activity.ActivityDangKy"
-            android:exported="false" />
-        <activity
-            android:name=".activity.activity_dangnhap"
-            android:exported="false" />
-        <activity
-            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,6 +27,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.DangKyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
