@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="30dp">
 
@@ -105,11 +105,10 @@
             android:drawableLeft="@drawable/ic_logout"
             android:text="Logout" />
 
-
         <TextView
             style="@style/viewParent.headerText.settingsMiniTitle"
             android:gravity="center_horizontal"
-            android:text="App ver 2.0.1"
+            android:text="App ver 1.0.1"
             android:textAlignment="center" />
 
     </LinearLayout>

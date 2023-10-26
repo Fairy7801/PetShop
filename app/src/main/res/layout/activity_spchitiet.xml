@@ -259,7 +259,7 @@ tools:context=".activity.SPchitietActivity">
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sep_review_title"
-            tools:visibility="visible" />
+            tools:visibility="invisible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

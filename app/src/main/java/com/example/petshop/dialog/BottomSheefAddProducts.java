@@ -1,66 +1,234 @@
 package com.example.petshop.dialog;
 
+import static android.app.Activity.RESULT_OK;
+
+import static com.example.petshop.activity.MainActivity.idstore;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.petshop.R;
+import com.example.petshop.callback.CategoriesCallback;
+import com.example.petshop.dao.DaoCategories;
+import com.example.petshop.dao.DaoProducts;
+import com.example.petshop.model.Categories;
+import com.example.petshop.model.Products;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BottomSheefAddProducts#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class BottomSheefAddProducts extends Fragment {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.UUID;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class BottomSheefAddProducts extends BottomSheetDialogFragment {
+    EditText edt_idfood,edt_namefood,edt_gia,edt_soluong,edt_diachi,edt_mota;
+    Button btnaddimg, btnadd;
+    ImageView imghinhshow;
+    ArrayList<Products> foodArrayList;
+    ArrayList<Categories> categoriesArrayList = new ArrayList<>();
+    DaoCategories databaseCategories;
+    DaoProducts databaseFood;
+    Spinner sp_status,sp_theloai;
+    ArrayAdapter<Categories> categoriesArrayAdapter;
+    private Uri filePath;
+    private final int PICK_IMAGE_REQUEST = 22;
+    FirebaseStorage storage;
+    StorageReference storageReference;
+    String matl="";
+    private FirebaseAuth mAuth;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_bottom_sheef_add_products,container,false);
+        edt_idfood = view.findViewById(R.id.edt_idfood);
+        edt_namefood = view.findViewById(R.id.edt_namefood);
+        edt_mota = view.findViewById(R.id.edt_mota);
+        edt_gia = view.findViewById(R.id.edt_gia);
+        edt_soluong = view.findViewById(R.id.edt_soluong);
+        sp_status = view.findViewById(R.id.sp_status);
+        edt_diachi = view.findViewById(R.id.edt_diachi);
+        sp_theloai = view.findViewById(R.id.sp_theloai);
+        imghinhshow = view.findViewById(R.id.imghinhshow);
+        btnaddimg = view.findViewById(R.id.btnaddhinh);
+        btnadd = view.findViewById(R.id.btnadd);
+        mAuth = FirebaseAuth.getInstance();
+        databaseFood = new DaoProducts(getActivity());
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.planets_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_status.setAdapter(adapter);
+        showadaptertl();
+        categoriesArrayList = new ArrayList<>();
+        databaseCategories = new DaoCategories(getActivity());
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+        sp_theloai.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                matl = categoriesArrayList.get(sp_theloai.getSelectedItemPosition()).getId();
+            }
 
-    public BottomSheefAddProducts() {
-        // Required empty public constructor
-    }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+        databaseCategories.getAll(new CategoriesCallback() {
+            @Override
+            public void onSuccess(ArrayList<Categories> lists) {
+                categoriesArrayList.clear();
+                categoriesArrayList.addAll(lists);
+            }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BottomSheefAddProducts.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BottomSheefAddProducts newInstance(String param1, String param2) {
-        BottomSheefAddProducts fragment = new BottomSheefAddProducts();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+            @Override
+            public void onError(String message) {
+
+            }
+        });
+        btnaddimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SelectImage();
+            }
+        });
+        btnadd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Insertmodel();
+            }
+        });
+        return view;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        FirebaseApp.initializeApp(getActivity());
+    }
+
+    private void Insertmodel() {
+        if(filePath!=null){
+
+            final StorageReference imageFolder = storageReference.child("Product/"+ UUID.randomUUID().toString());
+            imageFolder.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+
+                            Products theLoai = new Products();
+                            String status = sp_status.getSelectedItem().toString();
+                            theLoai.setIdP(edt_idfood.getText().toString());
+                            theLoai.setNameP(edt_namefood.getText().toString());
+                            theLoai.setPrice(Double.parseDouble(edt_gia.getText().toString()));
+                            theLoai.setQuantity(Integer.parseInt(edt_soluong.getText().toString()));
+                            theLoai.setAddress(edt_diachi.getText().toString());
+                            theLoai.setDescription(edt_mota.getText().toString());
+                            theLoai.setStatus(status);
+                            theLoai.setId(matl);
+                            theLoai.setIdStore(idstore);
+                            theLoai.setImage(uri.toString());
+                            theLoai.setTokenStore(mAuth.getUid());
+                            databaseFood = new DaoProducts(getActivity());
+                            databaseFood.insert(theLoai);
+                            dismiss();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(),""+e.getMessage(),Toast.LENGTH_SHORT ).show();
+                        }
+                    });
+                }
+            });
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bottom_sheef_add_products, container, false);
+    private void SelectImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(
+                Intent.createChooser(
+                        intent,
+                        "Select Image from here..."),
+                PICK_IMAGE_REQUEST);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST
+                && resultCode == RESULT_OK
+                && data != null
+                && data.getData() != null) {
+
+            // Get the Uri of data
+            filePath = data.getData();
+            try {
+
+                // Setting image on image view using Bitmap
+                Bitmap bitmap = MediaStore
+                        .Images
+                        .Media
+                        .getBitmap(
+                                getContext().getContentResolver(),
+                                filePath);
+                imghinhshow.setImageBitmap(bitmap);
+            }
+
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void showadaptertl(){
+        categoriesArrayList = new ArrayList<>();
+        databaseCategories = new DaoCategories(getActivity());
+
+        databaseCategories.getAll(new CategoriesCallback() {
+            @Override
+            public void onSuccess(ArrayList<Categories> lists) {
+                categoriesArrayList.clear();
+                categoriesArrayList.addAll(lists);
+                Log.d("thien", "onSuccess: " + lists.toArray().toString());
+                categoriesArrayAdapter = new ArrayAdapter<Categories>(getActivity(), android.R.layout.simple_spinner_item,categoriesArrayList);
+                categoriesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                sp_theloai.setAdapter(categoriesArrayAdapter);
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
+    }
+
+
 }

@@ -4,18 +4,20 @@ public class Store {
     private String tokenStore;
     private String email;
     private String pass;
+    private String name;
     private String phone;
     private String address;
     private String image;
     private String status;
-    public Store(){
 
+    public Store() {
     }
 
-    public Store(String tokenStore, String email, String pass, String phone, String address, String image, String status) {
+    public Store(String tokenStore, String email, String pass, String name, String phone, String address, String image, String status) {
         this.tokenStore = tokenStore;
         this.email = email;
         this.pass = pass;
+        this.name = name;
         this.phone = phone;
         this.address = address;
         this.image = image;
@@ -44,6 +46,14 @@ public class Store {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhone() {
