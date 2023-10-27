@@ -54,8 +54,8 @@ tools:context=".activity.SPchitietActivity">
     android:layout_height="match_parent"
     android:background="@color/white"
     android:fillViewport="true"
-    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-    tools:context=".presentation.detail.DetailFragment">
+    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+<!--    tools:context=".presentation.detail.DetailFragment"-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -199,9 +199,6 @@ tools:context=".activity.SPchitietActivity">
             app:layout_constraintTop_toBottomOf="@id/txtstatus"
             tools:text="Release Date" />
 
-
-
-
         <TextView
             android:id="@+id/tv_review_title"
             style="@style/Home.Text.SectionTitle"
@@ -259,19 +256,21 @@ tools:context=".activity.SPchitietActivity">
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sep_review_title"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="0dp"
             tools:visibility="invisible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>
 
-<com.google.android.material.bottomappbar.BottomAppBar
-    android:id="@+id/bottom_bar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    app:menu="@menu/menu_detail"
-    android:visibility="gone"/>
+<!--<com.google.android.material.bottomappbar.BottomAppBar-->
+<!--    android:id="@+id/bottom_bar"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:layout_gravity="bottom"-->
+<!--    app:menu="@menu/menu_detail"-->
+<!--    android:visibility="gone"/>-->
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

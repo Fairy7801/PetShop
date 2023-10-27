@@ -2,17 +2,10 @@ package com.example.petshop.dialog;
 
 import static android.app.Activity.RESULT_OK;
 
-import static com.example.petshop.activity.MainActivity.idstore;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.petshop.R;
 import com.example.petshop.callback.CategoriesCallback;
@@ -46,25 +42,25 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class BottomSheefAddProducts extends BottomSheetDialogFragment {
-    EditText edt_idfood,edt_namefood,edt_gia,edt_soluong,edt_diachi,edt_mota;
+    EditText edt_idfood, edt_namefood, edt_gia, edt_soluong, edt_diachi, edt_mota;
     Button btnaddimg, btnadd;
     ImageView imghinhshow;
-    ArrayList<Products> foodArrayList;
     ArrayList<Categories> categoriesArrayList = new ArrayList<>();
     DaoCategories databaseCategories;
     DaoProducts databaseFood;
-    Spinner sp_status,sp_theloai;
+    Spinner sp_status, sp_theloai;
     ArrayAdapter<Categories> categoriesArrayAdapter;
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 22;
     FirebaseStorage storage;
     StorageReference storageReference;
-    String matl="";
+    String matl = "";
     private FirebaseAuth mAuth;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bottom_sheef_add_products,container,false);
+        View view = inflater.inflate(R.layout.fragment_bottom_sheef_add_products, container, false);
         edt_idfood = view.findViewById(R.id.edt_idfood);
         edt_namefood = view.findViewById(R.id.edt_namefood);
         edt_mota = view.findViewById(R.id.edt_mota);
@@ -119,7 +115,7 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
         btnadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Insertmodel();
+                InsertModel();
             }
         });
         return view;
@@ -131,19 +127,18 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
         FirebaseApp.initializeApp(getActivity());
     }
 
-    private void Insertmodel() {
-        if(filePath!=null){
-
-            final StorageReference imageFolder = storageReference.child("Product/"+ UUID.randomUUID().toString());
+    private void InsertModel() {
+        if (filePath != null) {
+            final StorageReference imageFolder = storageReference.child("Product/" + UUID.randomUUID().toString());
             imageFolder.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
+                            String status = sp_status.getSelectedItem().toString();
 
                             Products theLoai = new Products();
-                            String status = sp_status.getSelectedItem().toString();
                             theLoai.setIdP(edt_idfood.getText().toString());
                             theLoai.setNameP(edt_namefood.getText().toString());
                             theLoai.setPrice(Double.parseDouble(edt_gia.getText().toString()));
@@ -152,7 +147,7 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
                             theLoai.setDescription(edt_mota.getText().toString());
                             theLoai.setStatus(status);
                             theLoai.setId(matl);
-                            theLoai.setIdStore(idstore);
+                            theLoai.setIdStore(mAuth.getUid());
                             theLoai.setImage(uri.toString());
                             theLoai.setTokenStore(mAuth.getUid());
                             databaseFood = new DaoProducts(getActivity());
@@ -162,7 +157,7 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(),""+e.getMessage(),Toast.LENGTH_SHORT ).show();
+                            Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -201,14 +196,13 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
                                 getContext().getContentResolver(),
                                 filePath);
                 imghinhshow.setImageBitmap(bitmap);
-            }
-
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-    public void showadaptertl(){
+
+    public void showadaptertl() {
         categoriesArrayList = new ArrayList<>();
         databaseCategories = new DaoCategories(getActivity());
 
@@ -218,7 +212,7 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
                 categoriesArrayList.clear();
                 categoriesArrayList.addAll(lists);
                 Log.d("thien", "onSuccess: " + lists.toArray().toString());
-                categoriesArrayAdapter = new ArrayAdapter<Categories>(getActivity(), android.R.layout.simple_spinner_item,categoriesArrayList);
+                categoriesArrayAdapter = new ArrayAdapter<Categories>(getActivity(), android.R.layout.simple_spinner_item, categoriesArrayList);
                 categoriesArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 sp_theloai.setAdapter(categoriesArrayAdapter);
             }

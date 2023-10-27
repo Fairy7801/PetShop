@@ -31,6 +31,7 @@ import com.example.petshop.model.Products;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -45,6 +46,7 @@ public class FragmentCategory extends Fragment {
     DaoProducts daoFood;
     ProductAdapter foodAdapter;
     FirebaseStorage storage;
+    private FirebaseAuth mAuth;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class FragmentCategory extends Fragment {
         toolbar.setVisibility(View.VISIBLE);
         floatbtnthem=view.findViewById(R.id.floatbtnthem);
         daoFood = new DaoProducts(getActivity());
+        mAuth = FirebaseAuth.getInstance();
         foodArrayList = new ArrayList<>();
         foodAdapter = new ProductAdapter(foodArrayList,getActivity());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),2);
@@ -65,7 +68,7 @@ public class FragmentCategory extends Fragment {
             public void onSuccess(ArrayList<Products> lists) {
                 foodArrayList.clear();
                 for (int i =0;i<lists.size();i++){
-                    if (lists.get(i).getIdStore()!=null && lists.get(i).getIdStore().equalsIgnoreCase(idstore)){
+                    if (lists.get(i).getIdStore()!=null && lists.get(i).getIdStore().equalsIgnoreCase(mAuth.getUid())){
                         foodArrayList.add(lists.get(i));
                         foodAdapter.notifyDataSetChanged();
                     }

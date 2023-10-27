@@ -8,7 +8,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -34,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         bnv = findViewById(R.id.bnv);
         toolbar = findViewById(R.id.toolbar);
         titletoolbar = findViewById(R.id.toolbar_title);
@@ -46,12 +47,25 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
-        idstore=intent.getStringExtra("email");
+        SharedPreferences sharedPreferences = getSharedPreferences("TenSharedPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("NameStore", idstore);
+        editor.apply();
 
         if(savedInstanceState == null){
             bnv.setSelectedItemId(R.id.thongke);
             loadFragment(new FragmentStatistical());
         }
+
+        if (intent != null) {
+            String fragmentToShow = intent.getStringExtra("fragment_to_show");
+            if ("FragmentB".equals(fragmentToShow)) {
+                bnv.setSelectedItemId(R.id.category);
+                titletoolbar.setText("Sản Phẩm");
+                loadFragment(new FragmentCategory());
+            }
+        }
+
         toolbar.setNavigationIcon(R.drawable.ic_baseline_sort_);
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -64,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                         loadFragment(fragment);
                         return true;
                     case R.id.category:
-                        titletoolbar.setText("Đồ Ăn");
+                        titletoolbar.setText("Sản Phẩm");
                         fragment = new FragmentCategory();
                         loadFragment(fragment);
                         return true;
@@ -84,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

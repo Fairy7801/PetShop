@@ -134,60 +134,6 @@ public class DangNhapActivity extends AppCompatActivity implements FirebaseAuth.
                 });
     }
 
-
-//    private void login() {
-//        final String ussername = email.getText().toString().trim();
-//        final String pass1 = pass.getText().toString().trim();
-//        if (ussername.isEmpty() || pass1.isEmpty()) {
-//            email.setError("Bắt buộc");
-//            pass.setError("Bắt buộc");
-//            Toast.makeText(getApplicationContext(), "Vui Lòng Nhập Đầy Đủ 2 Trường", Toast.LENGTH_SHORT).show();
-//            return;
-//        } else if (pass1.length() < 6) {
-//            pass.setError("Mật khẩu phải lớn hơn 6 ký tự");
-//            return;
-//        } else if (!ussername.matches("^[a-zA-Z][a-z0-9_\\.]{4,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$")) {
-//            Toast.makeText(getApplicationContext(), "Email Không Hợp Lệ", Toast.LENGTH_SHORT).show();
-//        } else {
-//            databaseStore = new DaoStore(getApplicationContext());
-//            datastore = new ArrayList<>();
-//            databaseStore.getAll(new StoreCallback() {
-//                @Override
-//                public void onSuccess(ArrayList<Store> lists) {
-//                    datastore.clear();
-//                    datastore.addAll(lists);
-//                }
-//
-//                @Override
-//                public void onError(String message) {
-//
-//                }
-//            });
-//            progressBar.setVisibility(View.VISIBLE);
-//            mAuth.signInWithEmailAndPassword(ussername, pass1)
-//                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                            if (task.isSuccessful()) {
-//                                for (int i = 0; i < datastore.size(); i++) {
-//                                    if (datastore.get(i).getEmail().equalsIgnoreCase(email.getText().toString()) && datastore.get(i).getPass().equalsIgnoreCase(pass.getText().toString())) {
-//                                        Toast.makeText(getApplicationContext(), "Login Thành Công", Toast.LENGTH_SHORT).show();
-//                                        Intent is = new Intent(getApplicationContext(), MainActivity.class);
-//                                        is.putExtra("email", email.getText().toString());
-//                                        startActivity(is);
-//                                        break;
-//                                    } else {
-//                                        Toast.makeText(getApplicationContext(), "Login Thất Bại", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), "Login Thất Bại", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
-//        }
-//    }
-
     @Override
     protected void onStart() {
         super.onStart();
