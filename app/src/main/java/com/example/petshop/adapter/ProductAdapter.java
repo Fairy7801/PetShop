@@ -72,20 +72,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                     }
                 });
 
-
-//        holder.title.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
         holder.cardView1.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @SuppressLint("ResourceAsColor")
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SPchitietActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("img", categories.getImage());
                 intent.putExtra("gia", decimalFormat.format(categories.getPrice())+"\t VNĐ");
                 intent.putExtra("namefood", categories.getNameP());
@@ -124,7 +117,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             txtdiachi = itemView.findViewById(R.id.txtdiachi);
             txtgia = itemView.findViewById(R.id.txtgia);
             line1 = itemView.findViewById(R.id.line1);
-            cardView1 = itemView.findViewById(R.id.cardview1);
+            cardView1 = itemView.findViewById(R.id.cardview);
         }
     }
 }

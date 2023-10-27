@@ -117,4 +117,22 @@ public class Products {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
+    @Override
+    public String toString() {
+        return "Products{" +
+                "nameP='" + nameP + '\'' +
+                ", idP='" + idP + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", image='" + image + '\'' +
+                ", address='" + address + '\'' +
+                ", description='" + description + '\'' +
+                ", id='" + id + '\'' +
+                ", idStore='" + idStore + '\'' +
+                ", tokenStore='" + tokenStore + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }
