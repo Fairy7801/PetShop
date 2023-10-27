@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.petshop.Helper.ValidationHelper;
 import com.example.petshop.R;
 import com.example.petshop.callback.StoreCallback;
 import com.example.petshop.dao.DaoStore;
@@ -80,20 +81,24 @@ public class DangNhapActivity extends AppCompatActivity implements FirebaseAuth.
     }
 
     private boolean validateInput(String username, String password) {
-        if (username.isEmpty() || password.isEmpty()) {
+        boolean isValid = true;
+
+        if (!ValidationHelper.isNotEmpty(username) || !ValidationHelper.isNotEmpty(password)) {
             email.setError("Bắt buộc");
             pass.setError("Bắt buộc");
             Toast.makeText(getApplicationContext(), "Vui Lòng Nhập Đầy Đủ 2 Trường", Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (password.length() < 6) {
+            isValid = false;
+        } else if (!ValidationHelper.isPasswordValid(password)) {
             pass.setError("Mật khẩu phải lớn hơn 6 ký tự");
-            return false;
-        } else if (!username.matches("^[a-zA-Z][a-z0-9_\\.]{4,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$")) {
+            isValid = false;
+        } else if (!ValidationHelper.isValidEmail(username)) {
             Toast.makeText(getApplicationContext(), "Email Không Hợp Lệ", Toast.LENGTH_SHORT).show();
-            return false;
+            isValid = false;
         }
-        return true;
+
+        return isValid;
     }
+
 
     private void performLogin(String username, String password) {
         // Thực hiện đăng nhập ở đây, sử dụng username và password đã được kiểm tra tính hợp lệ.

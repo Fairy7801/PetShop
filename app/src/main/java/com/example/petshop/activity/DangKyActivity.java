@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.petshop.Helper.ValidationHelper;
 import com.example.petshop.R;
 import com.example.petshop.dao.DaoStore;
 import com.example.petshop.model.Store;
@@ -65,38 +66,41 @@ public class DangKyActivity extends AppCompatActivity {
     }
 
     private boolean validateRegistrationInput(String email, String pass, String nhappass) {
-        if (!email.matches("^[a-zA-Z][a-z0-9_\\.]{4,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$")) {
+        boolean isValid = true;
+
+        if (!ValidationHelper.isValidEmail(email)) {
             emailsignup.setError("Email không hợp lệ.");
-            return false;
+            isValid = false;
         }
 
-        if (TextUtils.isEmpty(email)) {
+        if (!ValidationHelper.isNotEmpty(email)) {
             emailsignup.setError("Bắt buộc");
-            return false;
+            isValid = false;
         }
 
-        if (TextUtils.isEmpty(pass)) {
+        if (!ValidationHelper.isNotEmpty(pass)) {
             passsignup.setError("Bắt buộc");
-            return false;
+            isValid = false;
         }
 
-        if (TextUtils.isEmpty(nhappass)) {
+        if (!ValidationHelper.isNotEmpty(nhappass)) {
             nhaplaipass.setError("Bắt buộc");
-            return false;
+            isValid = false;
         }
 
-        if (pass.length() < 6) {
+        if (!ValidationHelper.isPasswordValid(pass)) {
             passsignup.setError("Mật khẩu phải lớn hơn 6 ký tự");
-            return false;
+            isValid = false;
         }
 
         if (!pass.equals(nhappass)) {
             nhaplaipass.setError("Mật khẩu không khớp");
-            return false;
+            isValid = false;
         }
 
-        return true;
+        return isValid;
     }
+
 
     private void performRegistration(String email, String pass) {
         progressBar.setVisibility(View.VISIBLE);
