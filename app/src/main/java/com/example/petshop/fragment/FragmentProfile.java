@@ -1,66 +1,103 @@
 package com.example.petshop.fragment;
 
+import static com.example.petshop.activity.MainActivity.toolbar;
+
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.petshop.R;
+import com.example.petshop.callback.StoreCallback;
+import com.example.petshop.dao.DaoStore;
+import com.example.petshop.model.Store;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentProfile#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class FragmentProfile extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    CircleImageView profileCircleImageView;
+    TextView usernameTextView, email, logout, history, txteditprofile, txtchangepassword;
+    FirebaseUser firebaseUser;
+    DaoStore daoStore;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FragmentProfile() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentProfile.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentProfile newInstance(String param1, String param2) {
-        FragmentProfile fragment = new FragmentProfile();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        profileCircleImageView = view.findViewById(R.id.profileCircleImageView);
+        usernameTextView = view.findViewById(R.id.usernameTextView);
+        email = view.findViewById(R.id.email);
+        toolbar.setVisibility(View.VISIBLE);
+        logout = view.findViewById(R.id.logout);
+        txtchangepassword = view.findViewById(R.id.txtchangepassword);
+        txteditprofile = view.findViewById(R.id.txteditprofile);
+        history = view.findViewById(R.id.history);
+        daoStore = new DaoStore(getActivity());
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        daoStore.getAll(new StoreCallback() {
+            @Override
+            public void onSuccess(ArrayList<Store> lists) {
+                for (int i = 0; i < lists.size(); i++) {
+                    if (lists.get(i).getTokenStore().equalsIgnoreCase(firebaseUser.getUid())) {
+                        email.setText(lists.get(i).getEmail());
+                        usernameTextView.setText(lists.get(i).getName());
+                        Picasso.get()
+                                .load(lists.get(i).getImage()).into(profileCircleImageView);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fr_l, new FragmentHistory()).commit();
+            }
+        });
+        txteditprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fr_l, new FragmentEditProfile()).commit();
+            }
+        });
+        txtchangepassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fr_l, new FragmentChangePassword()).commit();
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+
+                Intent endMain = new Intent(Intent.ACTION_MAIN);
+                endMain.addCategory(Intent.CATEGORY_HOME);
+                startActivity(endMain);
+                getActivity().finish();
+                Toast.makeText(getActivity(), "See you later", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return view;
     }
 }
