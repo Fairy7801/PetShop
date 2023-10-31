@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         bnv = findViewById(R.id.bnv);
         toolbar = findViewById(R.id.toolbar);
         titletoolbar = findViewById(R.id.toolbar_title);
-        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.xam));
+        getWindow().setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         titletoolbar.setText("Trang Chủ");

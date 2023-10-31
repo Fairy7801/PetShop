@@ -10,7 +10,7 @@ tools:context=".activity.GiaoDichActivity">
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/cam"
+    android:background="#FFB6C1"
     android:layout_alignParentTop="true"
     >
     <TextView
@@ -92,7 +92,6 @@ tools:context=".activity.GiaoDichActivity">
                 android:textStyle="bold"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:textColor="@color/cam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
@@ -115,7 +114,7 @@ tools:context=".activity.GiaoDichActivity">
                 android:layout_marginLeft="10dp"
                 android:textStyle="bold"
                 android:layout_alignParentLeft="true"
-                android:backgroundTint="@color/cam"
+                android:backgroundTint="#53A678"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/white"
@@ -129,7 +128,7 @@ tools:context=".activity.GiaoDichActivity">
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
-                android:backgroundTint="@color/cam"
+                android:backgroundTint="#53A678"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>

@@ -33,7 +33,7 @@ public class FragmentHistory extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history,container,false);
-        getActivity(). getWindow().setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.cam));
+        getActivity(). getWindow().setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
         tabLayout = view.findViewById(R.id.tabLayout);
         back =  view.findViewById(R.id.back);
         toolbar.setVisibility(View.GONE);
