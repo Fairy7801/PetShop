@@ -21,6 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         android:text="Reload"
-        android:background="@color/cam"/>
+        android:background="#FFB6C1"/>
 
 </LinearLayout>

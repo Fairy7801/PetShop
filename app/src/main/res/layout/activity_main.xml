@@ -11,7 +11,7 @@ tools:context=".activity.MainActivity">
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
-    android:background="#fff"
+    android:background="#FFB6C1"
     android:elevation="10dp">
 
     <TextView
@@ -33,7 +33,7 @@ tools:context=".activity.MainActivity">
     android:id="@+id/bnv"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#fff"
+    android:background="#FFB6C1"
     android:theme="@style/BottomNv"
     android:layout_alignParentBottom="true"
     app:menu="@menu/itemadmin" />

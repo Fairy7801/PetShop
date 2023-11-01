@@ -5,7 +5,7 @@
 <style name="Theme.PetShop" parent="Theme.AppCompat.Light.NoActionBar">
     <!-- Primary brand color. -->
     <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorPrimaryDark">@color/colorPrimary</item>
     <item name="colorPrimaryVariant">@color/cam</item>
     <item name="colorAccent">@color/colorAccent</item>
     <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
@@ -14,7 +14,7 @@
 
 <style name="BottomNv" parent="Theme.MaterialComponents.Light.NoActionBar">
     <!-- Primary brand color. -->
-    <item name="colorPrimary">#ff6f00</item>
+    <item name="colorPrimary">#53A678</item>
     <item name="colorPrimaryVariant">#3700B3</item>
     <item name="colorOnPrimary">@color/white</item>
     <!-- Secondary brand color. -->

@@ -19,11 +19,11 @@
         android:id="@+id/tvNewItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="UPDATE FOOD"
-        android:textSize="20sp"
+        android:text="UPDATE PRODUCTS"
+        android:textSize="25sp"
         android:textStyle="bold"
         android:layout_marginBottom="20dp"
-        android:textColor="#ff6f00"
+        android:textColor="#53A678"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp" />
@@ -43,7 +43,7 @@
                 android:layout_height="50dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:hint="Mã Món Ăn"
+                android:hint="Mã Sản Phẩm"
                 android:enabled="false"
                 android:textColor="#000"
                 android:textColorHint="#000" />
@@ -65,7 +65,7 @@
                 android:layout_marginRight="20dp"
                 android:textColor="#000"
                 android:layout_marginTop="10dp"
-                android:hint="Tên Món Ăn"
+                android:hint="Tên Sản Phẩm"
 
                 android:textColorHint="#000"
                 android:layout_height="50dp"/>

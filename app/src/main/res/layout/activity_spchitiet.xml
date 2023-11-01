@@ -93,9 +93,11 @@ tools:context=".activity.SPchitietActivity">
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:adjustViewBounds="true"
-            android:background="@color/grey_200"
+            android:background="#FFB6C1"
             app:layout_constraintBottom_toBottomOf="@id/guide_info_panel"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_editor_absoluteX="0dp" />
 
         <TextView
             android:id="@+id/tv_detail_rating"
