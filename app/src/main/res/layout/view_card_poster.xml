@@ -16,4 +16,9 @@
         android:scaleType="centerCrop"
         android:layout_height="200dp"
         tools:src="@drawable/backgroundlogin" />
+    <ProgressBar
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:id="@+id/progressviewcard"
+        android:visibility="visible"/>
 </androidx.cardview.widget.CardView>

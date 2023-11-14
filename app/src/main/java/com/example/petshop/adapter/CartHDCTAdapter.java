@@ -78,7 +78,6 @@ public class CartHDCTAdapter extends RecyclerView.Adapter<CartHDCTAdapter.MyView
 
                     @Override
                     public void onError(Exception e) {
-                        Log.d("Error : ", e.getMessage());
                     }
                 });
     }

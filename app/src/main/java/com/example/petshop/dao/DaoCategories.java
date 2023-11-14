@@ -1,6 +1,7 @@
 package com.example.petshop.dao;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,7 +55,14 @@ public class DaoCategories {
         // string key lấy mã push
         key = mRef.push().getKey();
         //insert theo child mã key setvalue theo item
-        mRef.child(key).setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
+        Categories categories = new Categories();
+        categories.setId(item.getId());
+        categories.setName(item.getName());
+        categories.setMoTa(item.getMoTa());
+        categories.setImage(item.getImage());
+        categories.setTrangthai(item.getTrangthai());
+        categories.setToken(key);
+        mRef.child(key).setValue(categories).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(context, "Insert Thành Công", Toast.LENGTH_SHORT).show();
@@ -72,7 +80,7 @@ public class DaoCategories {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.child("matheloai").getValue(String.class).equalsIgnoreCase(item.getId())) {
+                    if (dataSnapshot.child("token").getValue(String.class).equalsIgnoreCase(item.getToken())) {
                         key = dataSnapshot.getKey();
                         mRef.child(key).setValue(item);
                         Toast.makeText(context, "Update Thành Công", Toast.LENGTH_SHORT).show();
@@ -92,7 +100,7 @@ public class DaoCategories {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.child("matheloai").getValue(String.class).equalsIgnoreCase(matheloai)) {
+                    if (dataSnapshot.child("token").getValue(String.class).equalsIgnoreCase(matheloai)) {
                         key = dataSnapshot.getKey();
                         mRef.child(key).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override

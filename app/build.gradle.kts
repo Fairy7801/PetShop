@@ -44,8 +44,9 @@ dependencies {
     //noinspection GradleCompatible,GradleCompatible
     implementation("com.android.support:preference-v7:28.0.0")
 
-
-    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
+    //Google
+//    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
+    implementation(platform("com.google.firebase:firebase-bom:27.1.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation ("com.google.firebase:firebase-auth")
     implementation ("com.google.firebase:firebase-firestore:23.0.0")

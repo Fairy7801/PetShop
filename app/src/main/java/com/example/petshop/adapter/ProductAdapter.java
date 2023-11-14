@@ -1,10 +1,6 @@
 package com.example.petshop.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +10,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.petshop.R;
-import com.example.petshop.activity.SPchitietActivity;
 import com.example.petshop.model.Products;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -33,7 +27,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     ArrayList<Products> categoryList;
     Context context;
-    String Tag;
 
     public ProductAdapter(ArrayList<Products> categoryList, Context context) {
         this.categoryList = categoryList;
@@ -68,32 +61,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
                     @Override
                     public void onError(Exception e) {
-                        Log.d("Error : ", e.getMessage());
                     }
                 });
-
-        holder.cardView1.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, SPchitietActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("img", categories.getImage());
-                intent.putExtra("gia", decimalFormat.format(categories.getPrice())+"\t VNĐ");
-                intent.putExtra("namefood", categories.getNameP());
-                intent.putExtra("idfood","Id: "+categories.getIdP());
-                intent.putExtra("idstore",categories.getIdStore());
-                intent.putExtra("diachi",categories.getAddress());
-                intent.putExtra("sl",categories.getQuantity()+"");
-                intent.putExtra("matl",categories.getId());
-                intent.putExtra("status",categories.getStatus());
-                intent.putExtra("mota",categories.getDescription());
-
-                context.startActivity(intent);
-            }
-        });
-
     }
 
     @Override
