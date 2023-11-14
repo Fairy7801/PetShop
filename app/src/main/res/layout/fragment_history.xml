@@ -39,7 +39,7 @@
         app:tabTextColor="#FFF"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
         app:tabIndicatorHeight="4dp"
-        app:tabBackground="@color/cam"
+        app:tabBackground="@color/colorPrimary"
         app:tabMode="fixed">
     </com.google.android.material.tabs.TabLayout>
     <androidx.viewpager.widget.ViewPager

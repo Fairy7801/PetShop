@@ -156,14 +156,12 @@ public class FragmentThongKeNgay extends Fragment {
                         if (arrayList.get(i).isCheck()) {
                             orderArrayList.addAll(arrayList.get(i).getOrderArrayList());
                         }
-                        Log.d("VH11", "onDataChange: " + orderArrayList.toString());
                         for (int j = 0; j < orderArrayList.size(); j++) {
                             if (orderArrayList.get(j).getProducts().getTokenStore().equalsIgnoreCase(firebaseUser.getUid())) {
                                 listOrder.add(orderArrayList.get(j));
                             }
                         }
                     }
-                    Log.d("VH11", "onDataChange: " + listOrder.size() + listOrder.toString());
                     int tongngay = 0;
                     if (ngay.matches(ngaytk) && hdct.isCheck()) {
                         for (Order order : listOrder) {

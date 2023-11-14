@@ -7,9 +7,6 @@ import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,13 +16,28 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.example.petshop.R;
 import com.example.petshop.adapter.CategoriesAdapter;
+import com.example.petshop.adapter.ProductAdapter;
 import com.example.petshop.callback.CategoriesCallback;
+import com.example.petshop.callback.ProductsCallback;
+import com.example.petshop.callback.StoreCallback;
 import com.example.petshop.dao.DaoCategories;
+import com.example.petshop.dao.DaoProducts;
+import com.example.petshop.dao.DaoStore;
 import com.example.petshop.dialog.BottomSheefAddCategory;
+import com.example.petshop.dialog.BottomSheefAddProducts;
 import com.example.petshop.dialog.BottomSheefUpdateCategory;
+import com.example.petshop.dialog.BottomSheefUpdateProducts;
 import com.example.petshop.model.Categories;
+import com.example.petshop.model.Products;
+import com.example.petshop.model.Store;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
@@ -34,45 +46,59 @@ import java.util.ArrayList;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
-public class FragmentCategory extends Fragment {
-    public static RecyclerView rcvcategory;
+public class FragmentProducts extends Fragment {
+    public static RecyclerView rcvProduct;
     FloatingActionButton floatbtnthem;
-    ArrayList<Categories> categoriesArrayList;
-    DaoCategories daoCategories;
-    CategoriesAdapter categoriesAdapter;
+    ArrayList<Products> productsArrayList;
+    DaoProducts daoProducts;
+    DaoStore daoStore;
+    ProductAdapter productAdapter;
     FirebaseStorage storage;
+    String idCategoy, nameStore;
     private FirebaseAuth mAuth;
 
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_category, container, false);
-        rcvcategory = view.findViewById(R.id.rcvcategory);
+        View view = inflater.inflate(R.layout.fragment_products, container, false);
+        rcvProduct = view.findViewById(R.id.rcvproductfrag);
+        floatbtnthem=view.findViewById(R.id.floatbtnaddproduct);
         toolbar.setVisibility(View.VISIBLE);
-        floatbtnthem = view.findViewById(R.id.floatbtnthem);
-        daoCategories = new DaoCategories(getActivity());
-        categoriesArrayList = new ArrayList<>();
-        categoriesAdapter = new CategoriesAdapter(categoriesArrayList, getActivity());
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
-        rcvcategory.setLayoutManager(gridLayoutManager);
-        rcvcategory.setHasFixedSize(true);
-        rcvcategory.setAdapter(categoriesAdapter);
+        daoProducts = new DaoProducts(getActivity());
+        productsArrayList = new ArrayList<>();
         storage = FirebaseStorage.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        updateCategoryList();
+
+        Bundle args = getArguments();
+        if (args != null) {
+            setupRecyclerView();
+            idCategoy = args.getString("idCategory");
+            updateProductList(idCategoy);
+        }
 
         floatbtnthem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheefAddCategory bottomSheefAddCategory = new BottomSheefAddCategory();
-                bottomSheefAddCategory.show(getFragmentManager(), bottomSheefAddCategory.getTag());
+                Bundle args1 = new Bundle();
+                args1.putString("idCategory", idCategoy);
+                BottomSheefAddProducts bottomSheefAddProducts = new BottomSheefAddProducts();
+                bottomSheefAddProducts.setArguments(args1);
+                bottomSheefAddProducts.show(getFragmentManager(), bottomSheefAddProducts.getTag());
             }
         });
+
         intswipe(view);
         return view;
     }
 
-    public void intswipe(final View v) {
+    private void setupRecyclerView() {
+        productAdapter = new ProductAdapter(productsArrayList, getActivity());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        rcvProduct.setLayoutManager(gridLayoutManager);
+        rcvProduct.setHasFixedSize(true);
+        rcvProduct.setAdapter(productAdapter);
+    }
+
+    private void intswipe(final View v) {
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT | ItemTouchHelper.DOWN | ItemTouchHelper.UP) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -87,28 +113,30 @@ public class FragmentCategory extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
-                updateCategoryList();
-                Bundle args = new Bundle();
-                args.putString("idCategory", categoriesArrayList.get(position).getId() + "");
-                args.putString("tokenstore",mAuth.getUid().toString());
+                updateProductList(idCategoy);
+                Bundle args2 = new Bundle();
+                getNameStore();
+                args2.putString("idP", productsArrayList.get(position).getIdP()+"");
+                args2.putString("nameStore", nameStore);
+                args2.putString("idCate", productsArrayList.get(position).getId()+"");
 
                 switch (direction) {
                     case ItemTouchHelper.LEFT:
-                        showDeleteConfirmationDialog(position);
+                        showDeleteConfirmationDialog(position, idCategoy);
                         break;
                     case ItemTouchHelper.RIGHT:
-                        BottomSheefUpdateCategory bottomSheefUpdateCategory = new BottomSheefUpdateCategory();
-                        bottomSheefUpdateCategory.setArguments(args);
-                        bottomSheefUpdateCategory.show(getActivity().getSupportFragmentManager(), bottomSheefUpdateCategory.getTag());
+                        BottomSheefUpdateProducts bottomSheefUpdateProducts = new BottomSheefUpdateProducts();
+                        bottomSheefUpdateProducts.setArguments(args2);
+                        bottomSheefUpdateProducts.show(getActivity().getSupportFragmentManager(), bottomSheefUpdateProducts.getTag());
                         break;
                     case ItemTouchHelper.DOWN:
                     case ItemTouchHelper.UP:
-                        FragmentProducts fragmentProducts = new FragmentProducts();
-                        fragmentProducts.setArguments(args);
+                        FragmentDetailProduct fragmentProducts = new FragmentDetailProduct();
+                        fragmentProducts.setArguments(args2);
                         getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fr_l, fragmentProducts)
-                        .addToBackStack(null)
-                        .commit();
+                                .replace(R.id.fr_l, fragmentProducts)
+                                .addToBackStack(null)
+                                .commit();
                         break;
                 }
             }
@@ -158,26 +186,25 @@ public class FragmentCategory extends Fragment {
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(rcvcategory);
+        itemTouchHelper.attachToRecyclerView(rcvProduct);
     }
-
-    private void showDeleteConfirmationDialog(final int position) {
+    private void showDeleteConfirmationDialog(final int position, String idCategoy) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Thông Báo");
         builder.setMessage("Bạn có chắc muốn xóa không");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String idCategory = categoriesArrayList.get(position).getToken();
-                daoCategories.delete(idCategory);
-                updateCategoryList();
+                String idCategoryDelete = productsArrayList.get(position).getIdP();
+                daoProducts = new DaoProducts(getContext());
+                daoProducts.delete(idCategoryDelete);
+                updateProductList(idCategoy);
                 dialog.cancel();
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                updateCategoryList();
                 dialog.cancel();
             }
         });
@@ -185,17 +212,41 @@ public class FragmentCategory extends Fragment {
         alertDialog.show();
     }
 
-    public void updateCategoryList() {
-        daoCategories.getAll(new CategoriesCallback() {
+    public void updateProductList(String categoryId) {
+        daoProducts.getAll(new ProductsCallback() {
             @Override
-            public void onSuccess(ArrayList<Categories> lists) {
-                categoriesArrayList.clear();
-                categoriesArrayList.addAll(lists);
-                categoriesAdapter.notifyDataSetChanged();
+            public void onSuccess(ArrayList<Products> lists) {
+                productsArrayList.clear();
+                for (int i = 0; i < lists.size(); i++) {
+                    if (lists.get(i).getId() != null && lists.get(i).getId().equalsIgnoreCase(categoryId)) {
+                        productsArrayList.add(lists.get(i));
+                    }
+                }
+                productAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(String message) {
+                // Xử lý lỗi nếu cần
+            }
+        });
+    }
+
+    public void getNameStore() {
+        daoStore = new DaoStore(getContext());
+        daoStore.getAll(new StoreCallback() {
+            @Override
+            public void onSuccess(ArrayList<Store> lists) {
+                for (int i = 0; i < lists.size(); i++) {
+                    if (lists.get(i).getTokenStore() != null && lists.get(i).getTokenStore().equalsIgnoreCase(mAuth.getUid())) {
+                        nameStore = lists.get(i).getName();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+
             }
         });
     }

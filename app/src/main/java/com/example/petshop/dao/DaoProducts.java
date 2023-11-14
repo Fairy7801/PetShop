@@ -1,6 +1,7 @@
 package com.example.petshop.dao;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -55,8 +56,19 @@ public class DaoProducts {
         // push cây theo mã tự tạo
         // string key lấy mã push
         key = mRef.push().getKey();
+        Products p = new Products();
+        p.setId(item.getId());
+        p.setIdStore(item.getIdStore());
+        p.setDescription(item.getDescription());
+        p.setQuantity(item.getQuantity());
+        p.setAddress(item.getAddress());
+        p.setPrice(item.getPrice());
+        p.setIdP(key);
+        p.setImage(item.getImage());
+        p.setNameP(item.getNameP());
+        p.setTokenStore(item.getTokenStore());
         //insert theo child mã key setvalue theo item
-        mRef.child(key).setValue(item).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mRef.child(key).setValue(p).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(context, "Insert Thành Công", Toast.LENGTH_SHORT).show();
@@ -74,7 +86,7 @@ public class DaoProducts {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.child("idproduct").getValue(String.class).equalsIgnoreCase(item.getIdP())) {
+                    if (dataSnapshot.child("idP").getValue(String.class).equalsIgnoreCase(item.getIdP())) {
                         key = dataSnapshot.getKey();
                         mRef.child(key).setValue(item);
                         Toast.makeText(context, "Update Thành Công", Toast.LENGTH_SHORT).show();
@@ -94,7 +106,7 @@ public class DaoProducts {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.child("idproduct").getValue(String.class).equalsIgnoreCase(matheloai)) {
+                    if (dataSnapshot.child("idP").getValue(String.class).equalsIgnoreCase(matheloai)) {
                         key = dataSnapshot.getKey();
                         mRef.child(key).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override

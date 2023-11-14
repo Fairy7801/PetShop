@@ -1,7 +1,6 @@
 package com.example.petshop.fragment;
 
 import static android.app.Activity.RESULT_OK;
-
 import static com.example.petshop.activity.MainActivity.bnv;
 import static com.example.petshop.activity.MainActivity.toolbar;
 
@@ -9,11 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 import com.example.petshop.Helper.ValidationHelper;
 import com.example.petshop.R;
 import com.example.petshop.callback.StoreCallback;
@@ -35,7 +34,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -102,9 +100,9 @@ public class FragmentEditProfile extends Fragment {
                 edtname.setText(name);
                 edtphone.setText(phone);
                 if (anh == null) {
-                    Picasso.get().load("https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg").into(imgprofile);
+                    Glide.with(getContext()).load("https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg").into(imgprofile);
                 } else if (anh != null) {
-                    Picasso.get().load(anh).into(imgprofile);
+                    Glide.with(getContext()).load(anh).into(imgprofile);
                 }
             }
 

@@ -51,7 +51,6 @@ public class DangNhapActivity extends AppCompatActivity implements FirebaseAuth.
         mloginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                login();
                 validateAndLogin();
             }
         });
@@ -63,12 +62,12 @@ public class DangNhapActivity extends AppCompatActivity implements FirebaseAuth.
                 startActivity(i);
             }
         });
-        btnquenmatkhau.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Quên mật khẩu kệ mẹ mày, đéo thân! :v", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        btnquenmatkhau.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), "Quên mật khẩu kệ mẹ mày, đéo thân! :v", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     private void validateAndLogin() {

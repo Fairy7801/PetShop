@@ -70,17 +70,13 @@ public class FragmentThongKeNam extends Fragment {
                     HDCT hdct = dataSnapshot.getValue(HDCT.class);
                     arrayList.add(hdct);
                 }
-                Log.d("VH21", "size " + labelName.length +"/" + arrayList.size());
                 for (int positionLabel = 0; positionLabel < labelName.length ; positionLabel++) {
                     ArrayList<Order> listOrder = new ArrayList<>();
                     for (int i = 0; i < arrayList.size(); i++) {
-                        Log.d("VH23", "thang " + arrayList.size() +"/" + arrayList.toString());
                         orderArrayList.clear();
                         String thangtk = arrayList.get(i).getNgay().substring(3, 5);
-                        Log.d("VH22", "thang " + thangtk + "/" );
                         if (arrayList.get(i).isCheck() && thangtk.equals(labelName[positionLabel])) {
                             orderArrayList.addAll(arrayList.get(i).getOrderArrayList());
-                            Log.d("VH0", "onDataChange: " + orderArrayList.toString());
                             for (int j = 0; j < orderArrayList.size(); j++) {
                                 if (orderArrayList.get(j).getProducts().getTokenStore().equalsIgnoreCase(firebaseUser.getUid())) {
                                     listOrder.add(orderArrayList.get(j));

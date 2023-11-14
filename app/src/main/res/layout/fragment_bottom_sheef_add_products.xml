@@ -13,11 +13,18 @@
         android:layout_gravity="center_horizontal"
         android:background="@android:color/darker_gray"
         />
+    <ProgressBar
+        android:id="@+id/progressbaUpdaterProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone" />
     <TextView
         android:id="@+id/tvNewItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ADD PRODUCTS"
+        android:text="ADD PRODUCT"
         android:textSize="25sp"
         android:textStyle="bold"
         android:layout_marginBottom="20dp"
@@ -35,15 +42,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <EditText
-                android:id="@+id/edt_idfood"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:hint="Mã Sản Phẩm"
-                android:textColor="#000"
-                android:textColorHint="#000" />
+<!--            <EditText-->
+<!--                android:id="@+id/edt_idfood"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginLeft="20dp"-->
+<!--                android:layout_marginRight="20dp"-->
+<!--                android:hint="Mã Sản Phẩm"-->
+<!--                android:textColor="#000"-->
+<!--                android:textColorHint="#000" />-->
             <EditText
                 android:id="@+id/edt_gia"
                 android:layout_width="match_parent"
@@ -106,30 +113,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tx_theloai"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:textColor="#000"
-                    android:textSize="20dp"
-                    android:paddingTop="2dp"
-                    android:text="Buổi" />
-
-                <Spinner
-                    android:id="@+id/sp_status"
-                    android:layout_width="match_parent"
-                    android:textAlignment="center"
-                    android:layout_height="40dp" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
-                android:orientation="horizontal">
-
-                <TextView
                     android:id="@+id/tx_theloai1"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
@@ -138,8 +121,12 @@
                     android:paddingTop="2dp"
                     android:text="Thể Loại" />
 
-                <Spinner
-                    android:id="@+id/sp_theloai"
+                <TextView
+                    android:hint="thien ơi"
+                    android:textSize="19sp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:id="@+id/tv_theloai"
                     android:layout_width="match_parent"
                     android:textAlignment="center"
                     android:layout_height="40dp" />
@@ -159,7 +146,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_height="100dp"/>
                 <Button
-                    android:id="@+id/btnaddhinh"
+                    android:id="@+id/btnaddimgproduct"
                     android:text="Chọn Ảnh"
                     android:layout_marginTop="10dp"
                     android:textColor="#fff"
@@ -180,9 +167,12 @@
                 android:layout_marginEnd="30dp"
                 android:background="@drawable/btnbogoc"
                 android:layout_marginBottom="10dp"
-                android:id="@+id/btnadd"
+                android:id="@+id/btnaddproduct"
                 android:layout_height="40dp"
                 />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="160dp" />
         </LinearLayout>
 
     </ScrollView>

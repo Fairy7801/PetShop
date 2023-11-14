@@ -6,25 +6,22 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.petshop.R;
-import com.example.petshop.callback.CategoriesCallback;
 import com.example.petshop.dao.DaoCategories;
 import com.example.petshop.dao.DaoProducts;
 import com.example.petshop.model.Categories;
@@ -33,98 +30,79 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.UUID;
 
-public class BottomSheefAddProducts extends BottomSheetDialogFragment {
-    EditText edt_namefood, edt_gia, edt_soluong, edt_diachi, edt_mota;
-    Button btnaddimg, btnadd;
-    TextView tvNewItem, tv_theloai;
+public class BottomSheefAddCategory extends BottomSheetDialogFragment {
+
+    EditText edt_idcategory, edt_namecategory, edt_mota;
+    Button btnaddimg, btnaddcategory;
     ImageView imghinhshow;
-    DaoProducts databaseFood;
+    DaoCategories databaseCategories;
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 22;
     FirebaseStorage storage;
     StorageReference storageReference;
-    private FirebaseAuth mAuth;
-    String idP, nameStore;
 
-    @Nullable
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(getActivity());
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bottom_sheef_add_products, container, false);
+        View view = inflater.inflate(R.layout.fragment_bottom_sheef_add_category, container, false);
+        edt_idcategory = view.findViewById(R.id.edt_id_category);
+        edt_namecategory = view.findViewById(R.id.edt_namecategory);
+        edt_mota = view.findViewById(R.id.edt_motacategory);
+        btnaddimg = view.findViewById(R.id.btnaddhinhcategory);
+        imghinhshow = view.findViewById(R.id.imghinhshowCategory);
+        btnaddcategory = view.findViewById(R.id.btnaddCategory);
 
-        edt_namefood = view.findViewById(R.id.edt_namefood);
-        edt_mota = view.findViewById(R.id.edt_mota);
-        edt_gia = view.findViewById(R.id.edt_gia);
-        edt_soluong = view.findViewById(R.id.edt_soluong);
-        edt_diachi = view.findViewById(R.id.edt_diachi);
-        tv_theloai = view.findViewById(R.id.tv_theloai);
-        imghinhshow = view.findViewById(R.id.imghinhshow);
-        btnadd = view.findViewById(R.id.btnaddproduct);
-        btnaddimg = view.findViewById(R.id.btnaddimgproduct);
-
-        tvNewItem = view.findViewById(R.id.tvNewItem);
-
-        mAuth = FirebaseAuth.getInstance();
-        databaseFood = new DaoProducts(getActivity());
+        databaseCategories = new DaoCategories(getActivity());
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        tvNewItem.setText("ADD PRODUCT");
 
-        tv_theloai.setText(idP);
+
+
         btnaddimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SelectImage();
             }
         });
-        btnadd.setOnClickListener(new View.OnClickListener() {
+        btnaddcategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 InsertModel();
             }
         });
-        return view;
-    }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            idP = getArguments().getString("idCategory");
-            nameStore = getArguments().getString("nameStore");
-        }
-        FirebaseApp.initializeApp(getActivity());
+        return view;
     }
 
     private void InsertModel() {
         if (filePath != null) {
-            final StorageReference imageFolder = storageReference.child("Product/" + UUID.randomUUID().toString());
+            final StorageReference imageFolder = storageReference.child("Categories/" + UUID.randomUUID().toString());
             imageFolder.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            Products theLoai = new Products();
-                            theLoai.setNameP(edt_namefood.getText().toString());
-                            theLoai.setPrice(Double.parseDouble(edt_gia.getText().toString()));
-                            theLoai.setQuantity(Integer.parseInt(edt_soluong.getText().toString()));
-                            theLoai.setAddress(edt_diachi.getText().toString());
-                            theLoai.setDescription(edt_mota.getText().toString());
-                            theLoai.setId(idP);
-                            theLoai.setIdStore(nameStore);
+                            Categories theLoai = new Categories();
+                            theLoai.setId(edt_idcategory.getText().toString());
+                            theLoai.setName(edt_namecategory.getText().toString());
+                            theLoai.setMoTa(edt_mota.getText().toString());
+                            theLoai.setTrangthai(true);
                             theLoai.setImage(uri.toString());
-                            theLoai.setTokenStore(mAuth.getUid());
-                            databaseFood = new DaoProducts(getActivity());
-                            databaseFood.insert(theLoai);
+                            databaseCategories = new DaoCategories(getActivity());
+                            databaseCategories.insert(theLoai);
                             dismiss();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -135,8 +113,6 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
                     });
                 }
             });
-        } else {
-            Toast.makeText(getActivity(), "Lam on chon anh san pham", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -158,12 +134,8 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
                 && resultCode == RESULT_OK
                 && data != null
                 && data.getData() != null) {
-
-            // Get the Uri of data
             filePath = data.getData();
             try {
-
-                // Setting image on image view using Bitmap
                 Bitmap bitmap = MediaStore
                         .Images
                         .Media
