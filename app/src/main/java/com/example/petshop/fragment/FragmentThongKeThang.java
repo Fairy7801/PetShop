@@ -113,7 +113,6 @@ public class FragmentThongKeThang extends Fragment {
                     if (Integer.parseInt(hdct.getNgay().substring(3, 5)) == selectedMonth)
                         arrayList.add(hdct);
                 }
-                Log.e("Ha14", "onDataChange: " + arrayList.toString());
                 for (int positionLabel = 0; positionLabel < labelName.length; positionLabel++) {
                     ArrayList<Order> listOrder = new ArrayList<>();
                     for (int i = 0; i < arrayList.size(); i++) {
@@ -132,7 +131,6 @@ public class FragmentThongKeThang extends Fragment {
                 }
                 // Copy all data from hashMap into TreeMap
                 TreeMap<String, ArrayList<Order>> sorted = new TreeMap<>(mapOder);
-                Log.e("Ha12", "onDataChange: " + mapOder);
                 for (String key : sorted.keySet()) {
                     int total = 0;
                     for (Order order : Objects.requireNonNull(sorted.get(key))) {
@@ -140,9 +138,6 @@ public class FragmentThongKeThang extends Fragment {
                     }
                     entryArrayList.add(new BarEntry(Integer.parseInt(key), total));
                 }
-
-                Log.e("entryArrayList", "onDataChange: " + entryArrayList.toString());
-
                 BarDataSet barDataSet = new BarDataSet(entryArrayList, "Ngày");
                 thongKeThang.notifyDataSetChanged();
                 barDataSet.setColors(Color.CYAN);
@@ -159,7 +154,6 @@ public class FragmentThongKeThang extends Fragment {
                 rightAxis.setEnabled(false);
                 XAxis xAxis = thongKeThang.getXAxis();
                 xAxis.setLabelCount(7);
-//                xAxis.setValueFormatter(new IndexAxisValueFormatter(labelName));
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                 xAxis.setDrawAxisLine(false);
                 xAxis.setDrawGridLines(false);

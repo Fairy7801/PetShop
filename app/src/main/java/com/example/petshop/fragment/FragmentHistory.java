@@ -41,7 +41,7 @@ public class FragmentHistory extends Fragment {
         viewPager =view.findViewById(R.id.viewPager);
         adapter = new TabAdapter(getActivity().getSupportFragmentManager());
         adapter.addFragment(new FragmentSuccessfulTransaction(), "Giao Dịch Thành Công");
-        adapter.addFragment(new FragmentFailedTransaction(), "Giao Dịch Thất Bại");
+        adapter.addFragment(new FragmentFailedTransaction(), "Giao Dịch Chờ Xác Nhận");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         titletoolbar.setText("Lịch Sử Order");

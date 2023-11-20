@@ -2,7 +2,9 @@ package com.example.petshop.dialog;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,10 +27,13 @@ import androidx.annotation.Nullable;
 
 import com.example.petshop.R;
 import com.example.petshop.callback.CategoriesCallback;
+import com.example.petshop.callback.StoreCallback;
 import com.example.petshop.dao.DaoCategories;
 import com.example.petshop.dao.DaoProducts;
+import com.example.petshop.dao.DaoStore;
 import com.example.petshop.model.Categories;
 import com.example.petshop.model.Products;
+import com.example.petshop.model.Store;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -40,6 +45,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.UUID;
 
 public class BottomSheefAddProducts extends BottomSheetDialogFragment {
@@ -52,7 +58,6 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
     private final int PICK_IMAGE_REQUEST = 22;
     FirebaseStorage storage;
     StorageReference storageReference;
-    private FirebaseAuth mAuth;
     String idP, nameStore;
 
     @Nullable
@@ -72,11 +77,13 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
 
         tvNewItem = view.findViewById(R.id.tvNewItem);
 
-        mAuth = FirebaseAuth.getInstance();
         databaseFood = new DaoProducts(getActivity());
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         tvNewItem.setText("ADD PRODUCT");
+
+        // Khởi tạo đối tượng SharedPreferences
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("store_info", Context.MODE_PRIVATE);
 
         tv_theloai.setText(idP);
         btnaddimg.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +95,7 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
         btnadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InsertModel();
+                InsertModel(sharedPreferences.getString("nameStore", ""), sharedPreferences.getString("tokenStore", ""));
             }
         });
         return view;
@@ -99,12 +106,11 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             idP = getArguments().getString("idCategory");
-            nameStore = getArguments().getString("nameStore");
         }
         FirebaseApp.initializeApp(getActivity());
     }
 
-    private void InsertModel() {
+    private void InsertModel(String name, String token) {
         if (filePath != null) {
             final StorageReference imageFolder = storageReference.child("Product/" + UUID.randomUUID().toString());
             imageFolder.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -119,10 +125,10 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
                             theLoai.setQuantity(Integer.parseInt(edt_soluong.getText().toString()));
                             theLoai.setAddress(edt_diachi.getText().toString());
                             theLoai.setDescription(edt_mota.getText().toString());
-                            theLoai.setId(idP);
-                            theLoai.setIdStore(nameStore);
+                            theLoai.setId(getArguments().getString("idCategory"));
+                            theLoai.setIdStore(name);
                             theLoai.setImage(uri.toString());
-                            theLoai.setTokenStore(mAuth.getUid());
+                            theLoai.setTokenStore(token);
                             databaseFood = new DaoProducts(getActivity());
                             databaseFood.insert(theLoai);
                             dismiss();
@@ -158,11 +164,9 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
                 && resultCode == RESULT_OK
                 && data != null
                 && data.getData() != null) {
-
             // Get the Uri of data
             filePath = data.getData();
             try {
-
                 // Setting image on image view using Bitmap
                 Bitmap bitmap = MediaStore
                         .Images

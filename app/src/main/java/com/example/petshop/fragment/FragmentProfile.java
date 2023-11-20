@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.petshop.R;
+import com.example.petshop.activity.DangNhapActivity;
+import com.example.petshop.activity.GiaoDichActivity;
 import com.example.petshop.callback.StoreCallback;
 import com.example.petshop.dao.DaoStore;
 import com.example.petshop.model.Store;
@@ -30,7 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FragmentProfile extends Fragment {
 
     CircleImageView profileCircleImageView;
-    TextView usernameTextView, email, logout, history, txteditprofile, txtchangepassword;
+    TextView usernameTextView, email, logout, history, txteditprofile, txtchangepassword, listorder;
     FirebaseUser firebaseUser;
     DaoStore daoStore;
 
@@ -46,6 +48,7 @@ public class FragmentProfile extends Fragment {
         txtchangepassword = view.findViewById(R.id.txtchangepassword);
         txteditprofile = view.findViewById(R.id.txteditprofile);
         history = view.findViewById(R.id.history);
+        listorder = view.findViewById(R.id.listorder);
         daoStore = new DaoStore(getActivity());
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         daoStore.getAll(new StoreCallback() {
@@ -86,16 +89,19 @@ public class FragmentProfile extends Fragment {
             }
         });
 
+        listorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), GiaoDichActivity.class));
+            }
+        });
+
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-
-                Intent endMain = new Intent(Intent.ACTION_MAIN);
-                endMain.addCategory(Intent.CATEGORY_HOME);
-                startActivity(endMain);
-                getActivity().finish();
                 Toast.makeText(getActivity(), "See you later", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), DangNhapActivity.class));
             }
         });
         return view;

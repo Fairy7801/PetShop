@@ -22,46 +22,49 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class FragmentFailedTransaction extends Fragment {
     AcceptAdapter xacnhanAdapter;
     Da0HDCT daoHDCT;
     RecyclerView rcvthanhcong;
     ArrayList<HDCT> arrayList;
-    FirebaseUser firebaseUser;
-    public static String uidstore1;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_failed_transaction,container,false);
-        rcvthanhcong= view.findViewById(R.id.rcvthanhcong);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false);
-        rcvthanhcong.setLayoutManager(linearLayoutManager);
+        rcvthanhcong = view.findViewById(R.id.rcvthanhcong);
+
         daoHDCT = new Da0HDCT(getActivity());
         arrayList=new ArrayList<>();
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        initView();
+        updateView();
+
+        return view;
+    }
+
+    public void initView() {
+        xacnhanAdapter = new AcceptAdapter(arrayList, getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false);
+        rcvthanhcong.setLayoutManager(linearLayoutManager);
+        rcvthanhcong.setHasFixedSize(true);
+        rcvthanhcong.setAdapter(xacnhanAdapter);
+    }
+    public void updateView() {
+        daoHDCT = new Da0HDCT(getActivity());
         daoHDCT.getAll(new HDCTCallback() {
             @Override
             public void onSuccess(ArrayList<HDCT> lists) {
-                String uidstore = "";
                 arrayList.clear();
-                ArrayList<Order> orderArrayList = new ArrayList<>();
-                orderArrayList.clear();
-                for (int i =0;i<lists.size();i++){
-                    if ( lists.get(i).isCheck() == false) {
-
-                        orderArrayList.addAll(lists.get(i).getOrderArrayList());
-                    }
-
-                }
                 for (int k = 0; k < lists.size(); k++) {
-                    if (uidstore.equalsIgnoreCase(firebaseUser.getUid()) && lists.get(k).isCheck() == false) {
+                    if (!lists.get(k).isCheck()) {
                         arrayList.add(lists.get(k));
-                        xacnhanAdapter = new AcceptAdapter(arrayList, getActivity());
-                        rcvthanhcong.setAdapter(xacnhanAdapter);
                     }
                 }
+                Collections.reverse(arrayList);
+                xacnhanAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -69,6 +72,5 @@ public class FragmentFailedTransaction extends Fragment {
 
             }
         });
-        return view;
     }
 }

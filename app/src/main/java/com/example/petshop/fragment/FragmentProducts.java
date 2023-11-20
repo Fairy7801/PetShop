@@ -54,7 +54,8 @@ public class FragmentProducts extends Fragment {
     DaoStore daoStore;
     ProductAdapter productAdapter;
     FirebaseStorage storage;
-    String idCategoy, nameStore;
+    String idCategoy;
+    String nameStore;
     private FirebaseAuth mAuth;
 
     @Override

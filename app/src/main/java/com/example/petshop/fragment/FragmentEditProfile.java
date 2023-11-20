@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -100,9 +101,9 @@ public class FragmentEditProfile extends Fragment {
                 edtname.setText(name);
                 edtphone.setText(phone);
                 if (anh == null) {
-                    Glide.with(getContext()).load("https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg").into(imgprofile);
+                    Picasso.get().load("https://vnn-imgs-a1.vgcloud.vn/image1.ictnews.vn/_Files/2020/03/17/trend-avatar-1.jpg").into(imgprofile);
                 } else if (anh != null) {
-                    Glide.with(getContext()).load(anh).into(imgprofile);
+                    Picasso.get().load(anh).into(imgprofile);
                 }
             }
 
