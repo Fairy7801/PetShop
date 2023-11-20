@@ -17,17 +17,27 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.petshop.R;
+import com.example.petshop.callback.StoreCallback;
+import com.example.petshop.dao.DaoStore;
 import com.example.petshop.fragment.FragmentCategory;
 import com.example.petshop.fragment.FragmentManager;
 import com.example.petshop.fragment.FragmentProfile;
 import com.example.petshop.fragment.FragmentStatistical;
+import com.example.petshop.model.Store;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static Toolbar toolbar;
     public static BottomNavigationView bnv;
+    private FirebaseUser firebaseUser;
     TextView titletoolbar;
-    public static String idstore="";
+    public static String idstore = "";
+    // Đặt tên cho SharedPreferences
+    private static final String PREF_NAME = "store_info";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 
@@ -35,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         bnv = findViewById(R.id.bnv);
         toolbar = findViewById(R.id.toolbar);
@@ -47,12 +59,31 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
-        SharedPreferences sharedPreferences = getSharedPreferences("TenSharedPreferences", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("NameStore", idstore);
-        editor.apply();
+        // Khởi tạo đối tượng SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
-        if(savedInstanceState == null){
+        DaoStore daoStore = new DaoStore(MainActivity.this);
+        daoStore.getAll(new StoreCallback() {
+            @Override
+            public void onSuccess(ArrayList<Store> lists) {
+                if (!lists.isEmpty()) {
+                    Store firstStore = lists.get(0);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("nameStore", firstStore.getName());
+                    editor.putString("tokenStore", firstStore.getTokenStore());
+                    editor.putString("emailStore", firstStore.getEmail());
+                    editor.putString("addressStore", firstStore.getAddress());
+                    editor.apply();
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
+
+        if (savedInstanceState == null) {
             bnv.setSelectedItemId(R.id.thongke);
             loadFragment(new FragmentStatistical());
         }
@@ -71,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment fragment;
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.thongke:
                         titletoolbar.setText("Thống Kê");
                         fragment = new FragmentStatistical();

@@ -100,6 +100,12 @@
             android:text="History Order" />
 
         <TextView
+            android:id="@+id/listorder"
+            style="@style/viewParent.headerText.settingsTextIcon"
+            android:drawableLeft="@drawable/ic_shopping_bag"
+            android:text="Waiting List Order" />
+
+        <TextView
             android:id="@+id/logout"
             style="@style/viewParent.headerText.settingsTextIcon"
             android:drawableLeft="@drawable/ic_logout"

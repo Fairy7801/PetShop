@@ -33,7 +33,6 @@ public class FragmentStatistical extends Fragment {
         adapter.addFragment(new FragmentThongKeNgay(), "Ngày");
         adapter.addFragment(new FragmentThongKeThang(), "Tháng");
         adapter.addFragment(new FragmentThongKeNam(), "Năm");
-//        adapter.addFragment(new FragmentThongKe_TopSanPham(), "Top Sản Phẩm");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
         return view;

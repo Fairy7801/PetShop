@@ -91,7 +91,7 @@ public class FragmentThongKeNgay extends Fragment {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 arrayListHDCT.clear();
-                                String uidstore = "";
+                                String uidstore = firebaseUser.getUid();
                                 ArrayList<Order> orderArrayList = new ArrayList<>();
                                 orderArrayList.clear();
                                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -101,11 +101,11 @@ public class FragmentThongKeNgay extends Fragment {
                                         if (arrayList.get(i).isCheck() == true) {
                                             orderArrayList.addAll(arrayListHDCT.get(i).getOrderArrayList());
                                         }
-                                        for (int j = 0; j < orderArrayList.size(); j++) {
-                                            if (orderArrayList.get(j).getStore().getTokenStore().equalsIgnoreCase(firebaseUser.getUid())) {
-                                                uidstore = orderArrayList.get(j).getStore().getTokenStore();
-                                            }
-                                        }
+//                                        for (int j = 0; j < orderArrayList.size(); j++) {
+//                                            if (orderArrayList.get(j).getStore().getTokenStore().equalsIgnoreCase(firebaseUser.getUid())) {
+//                                                uidstore = orderArrayList.get(j).getStore().getTokenStore();
+//                                            }
+//                                        }
                                     }
                                     double tongngay = 0;
                                     if (hdct.isCheck() == true && uidstore.equalsIgnoreCase(firebaseUser.getUid())) {
