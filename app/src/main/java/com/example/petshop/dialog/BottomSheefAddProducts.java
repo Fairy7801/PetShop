@@ -31,6 +31,7 @@ import com.example.petshop.callback.StoreCallback;
 import com.example.petshop.dao.DaoCategories;
 import com.example.petshop.dao.DaoProducts;
 import com.example.petshop.dao.DaoStore;
+import com.example.petshop.databinding.FragmentBottomSheefAddProductsBinding;
 import com.example.petshop.model.Categories;
 import com.example.petshop.model.Products;
 import com.example.petshop.model.Store;
@@ -49,55 +50,30 @@ import java.util.Map;
 import java.util.UUID;
 
 public class BottomSheefAddProducts extends BottomSheetDialogFragment {
-    EditText edt_namefood, edt_gia, edt_soluong, edt_diachi, edt_mota;
-    Button btnaddimg, btnadd;
-    TextView tvNewItem, tv_theloai;
-    ImageView imghinhshow;
+    private FragmentBottomSheefAddProductsBinding binding;
     DaoProducts databaseFood;
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 22;
     FirebaseStorage storage;
     StorageReference storageReference;
-    String idP, nameStore;
+    String idP;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bottom_sheef_add_products, container, false);
-
-        edt_namefood = view.findViewById(R.id.edt_namefood);
-        edt_mota = view.findViewById(R.id.edt_mota);
-        edt_gia = view.findViewById(R.id.edt_gia);
-        edt_soluong = view.findViewById(R.id.edt_soluong);
-        edt_diachi = view.findViewById(R.id.edt_diachi);
-        tv_theloai = view.findViewById(R.id.tv_theloai);
-        imghinhshow = view.findViewById(R.id.imghinhshow);
-        btnadd = view.findViewById(R.id.btnaddproduct);
-        btnaddimg = view.findViewById(R.id.btnaddimgproduct);
-
-        tvNewItem = view.findViewById(R.id.tvNewItem);
+        binding = FragmentBottomSheefAddProductsBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         databaseFood = new DaoProducts(getActivity());
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        tvNewItem.setText("ADD PRODUCT");
+        binding.tvNewItem.setText("ADD PRODUCT");
+        binding.tvTheloai.setText(idP);
 
         // Khởi tạo đối tượng SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("store_info", Context.MODE_PRIVATE);
-
-        tv_theloai.setText(idP);
-        btnaddimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SelectImage();
-            }
-        });
-        btnadd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InsertModel(sharedPreferences.getString("nameStore", ""), sharedPreferences.getString("tokenStore", ""));
-            }
-        });
+        binding.btnaddimgproduct.setOnClickListener(v -> SelectImage());
+        binding.btnaddproduct.setOnClickListener(v -> InsertModel(sharedPreferences.getString("nameStore", ""), sharedPreferences.getString("tokenStore", "")));
         return view;
     }
 
@@ -107,40 +83,28 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
         if (getArguments() != null) {
             idP = getArguments().getString("idCategory");
         }
-        FirebaseApp.initializeApp(getActivity());
+        FirebaseApp.initializeApp(requireActivity());
     }
 
     private void InsertModel(String name, String token) {
         if (filePath != null) {
             final StorageReference imageFolder = storageReference.child("Product/" + UUID.randomUUID().toString());
-            imageFolder.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    imageFolder.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Products theLoai = new Products();
-                            theLoai.setNameP(edt_namefood.getText().toString());
-                            theLoai.setPrice(Double.parseDouble(edt_gia.getText().toString()));
-                            theLoai.setQuantity(Integer.parseInt(edt_soluong.getText().toString()));
-                            theLoai.setAddress(edt_diachi.getText().toString());
-                            theLoai.setDescription(edt_mota.getText().toString());
-                            theLoai.setId(getArguments().getString("idCategory"));
-                            theLoai.setIdStore(name);
-                            theLoai.setImage(uri.toString());
-                            theLoai.setTokenStore(token);
-                            databaseFood = new DaoProducts(getActivity());
-                            databaseFood.insert(theLoai);
-                            dismiss();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            });
+            imageFolder.putFile(filePath).addOnSuccessListener(taskSnapshot ->
+                    imageFolder.getDownloadUrl().addOnSuccessListener(uri -> {
+                        Products theLoai = new Products();
+                        theLoai.setNameP(binding.edtNamefood.getText().toString());
+                        theLoai.setPrice(Double.parseDouble(binding.edtGia.getText().toString()));
+                        theLoai.setQuantity(Integer.parseInt(binding.edtSoluong.getText().toString()));
+                        theLoai.setAddress(binding.edtDiachi.getText().toString());
+                        theLoai.setDescription(binding.edtMota.getText().toString());
+                        theLoai.setId(getArguments().getString("idCategory"));
+                        theLoai.setIdStore(name);
+                        theLoai.setImage(uri.toString());
+                        theLoai.setTokenStore(token);
+                        databaseFood = new DaoProducts(requireActivity());
+                        databaseFood.insert(theLoai);
+                        dismiss();
+                    }).addOnFailureListener(e -> Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_SHORT).show()));
         } else {
             Toast.makeText(getActivity(), "Lam on chon anh san pham", Toast.LENGTH_SHORT).show();
         }
@@ -174,7 +138,7 @@ public class BottomSheefAddProducts extends BottomSheetDialogFragment {
                         .getBitmap(
                                 getContext().getContentResolver(),
                                 filePath);
-                imghinhshow.setImageBitmap(bitmap);
+                binding.imghinhshow.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }

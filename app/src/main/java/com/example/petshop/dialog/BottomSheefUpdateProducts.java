@@ -102,6 +102,7 @@ public class BottomSheefUpdateProducts extends BottomSheetDialogFragment {
                         price = lists.get(i).getPrice();
                         quantity = lists.get(i).getQuantity();
                         tokenStore = lists.get(i).getTokenStore();
+                        break;
                     }
                 }
 
@@ -123,21 +124,13 @@ public class BottomSheefUpdateProducts extends BottomSheetDialogFragment {
 
             }
         });
-        btnaddimg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SelectImage();
-            }
-        });
-        btnadd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                if (filePath != null) {
-                    updateProductWithImage();
-                } else {
-                    updateProductWithoutImage();
-                }
+        btnaddimg.setOnClickListener(v -> SelectImage());
+        btnadd.setOnClickListener(v -> {
+            progressBar.setVisibility(View.VISIBLE);
+            if (filePath != null) {
+                updateProductWithImage();
+            } else {
+                updateProductWithoutImage();
             }
         });
         return view;
