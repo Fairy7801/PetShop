@@ -76,12 +76,7 @@ public class FragmentProfile extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fr_l, new FragmentHistory()).commit();
             }
         });
-        txteditprofile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fr_l, new FragmentEditProfile()).commit();
-            }
-        });
+        txteditprofile.setOnClickListener(v -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fr_l, new FragmentEditProfile()).commit());
         txtchangepassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

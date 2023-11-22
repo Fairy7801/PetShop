@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class FragmentDetailProduct extends Fragment {
-    String idP, nameStore, idCate;
+    String idP, idCate;
     TextView tv_detail_rating,tv_detail_release_date,tv_detail_vote_count,txtsoluong,txtdiachi,txtmota;
     Toolbar toolbar;
     ImageView iv_backdrop,iv_detail_poster;
@@ -46,7 +46,6 @@ public class FragmentDetailProduct extends Fragment {
         if (getArguments() != null) {
             idP = getArguments().getString("idP");
             idCate = getArguments().getString("idCate");
-            nameStore = getArguments().getString("nameStore");
         }
     }
 

@@ -7,8 +7,8 @@
         android:title="Statistical" />
     <item
         android:id="@+id/category"
-        android:icon="@drawable/icons8_salami_pizza_30px_1"
-        android:title="Food" />
+        android:icon="@drawable/icons8_categories_30"
+        android:title="Categories" />
     <item
         android:id="@+id/manager"
         android:icon="@drawable/icons8_facebook_messenger_24px_1"

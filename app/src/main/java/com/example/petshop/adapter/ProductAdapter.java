@@ -74,7 +74,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         ImageView imageView;
         TextView title, txtdiachi, txtgia;
         ProgressBar progressBar;
-        CardView cardView, cardView1, card_view4;
+        CardView cardView1;
         LinearLayout line1;
 
         public MyViewHolder(@NonNull View itemView) {

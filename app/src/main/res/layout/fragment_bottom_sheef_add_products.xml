@@ -42,26 +42,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-<!--            <EditText-->
-<!--                android:id="@+id/edt_idfood"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:layout_marginLeft="20dp"-->
-<!--                android:layout_marginRight="20dp"-->
-<!--                android:hint="Mã Sản Phẩm"-->
-<!--                android:textColor="#000"-->
-<!--                android:textColorHint="#000" />-->
-            <EditText
-                android:id="@+id/edt_gia"
-                android:layout_width="match_parent"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:textColor="#000"
-                android:layout_marginTop="10dp"
-                android:hint="Giá"
-                android:inputType="number"
-                android:textColorHint="#000"
-                android:layout_height="50dp"/>
             <EditText
                 android:id="@+id/edt_namefood"
                 android:layout_width="match_parent"
@@ -70,7 +50,6 @@
                 android:textColor="#000"
                 android:layout_marginTop="10dp"
                 android:hint="Tên Sản Phẩm"
-
                 android:textColorHint="#000"
                 android:layout_height="50dp"/>
             <EditText
@@ -102,6 +81,17 @@
                 android:textColor="#000"
                 android:layout_marginTop="10dp"
                 android:hint="Mô Tả"
+                android:textColorHint="#000"
+                android:layout_height="50dp"/>
+            <EditText
+                android:id="@+id/edt_gia"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:textColor="#000"
+                android:layout_marginTop="10dp"
+                android:hint="Giá"
+                android:inputType="number"
                 android:textColorHint="#000"
                 android:layout_height="50dp"/>
             <LinearLayout

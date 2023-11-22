@@ -49,7 +49,7 @@ tools:context=".activity.DangNhapActivity">
                 app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/Email"
+                    android:id="@+id/edt_email"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="#A6767E"
@@ -70,7 +70,7 @@ tools:context=".activity.DangNhapActivity">
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/password"
+                    android:id="@+id/edt_password"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:backgroundTint="#A6767E"
