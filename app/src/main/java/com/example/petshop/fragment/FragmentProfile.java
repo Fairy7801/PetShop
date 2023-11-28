@@ -80,7 +80,7 @@ public class FragmentProfile extends Fragment {
         txtchangepassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fr_l, new FragmentChangePassword()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fr_l, new FragmentChangePassword()).commit();
             }
         });
 

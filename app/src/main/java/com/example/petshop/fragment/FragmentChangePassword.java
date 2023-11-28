@@ -1,66 +1,138 @@
 package com.example.petshop.fragment;
 
+import static com.example.petshop.activity.MainActivity.bnv;
+import static com.example.petshop.activity.MainActivity.toolbar;
+
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.petshop.R;
+import com.example.petshop.callback.StoreCallback;
+import com.example.petshop.dao.DaoStore;
+import com.example.petshop.databinding.FragmentChangePasswordBinding;
+import com.example.petshop.model.Store;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragmentChangePassword#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
 public class FragmentChangePassword extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FragmentChangePassword() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentChangePassword.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentChangePassword newInstance(String param1, String param2) {
-        FragmentChangePassword fragment = new FragmentChangePassword();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    private FragmentChangePasswordBinding binding;
+    ImageView back;
+    EditText edtoldpass, edtpassnew, edtxacnhanpass;
+    DaoStore daoUser;
+    String mail, name, phone, diachi, anh,pass;
+    FirebaseUser firebaseUser;
+    Button btnchangepassword;
+    ArrayList<Store> dataUser;
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_change_password, container, false);
+        View view = inflater.inflate(R.layout.fragment_change_password, container, false);
+        bnv.setVisibility(View.GONE);
+        toolbar.setVisibility(View.GONE);
+        back = view.findViewById(R.id.back);
+        edtoldpass = view.findViewById(R.id.edtoldpass);
+        edtpassnew = view.findViewById(R.id.edtpassnew);
+        edtxacnhanpass = view.findViewById(R.id.edtxacnhanpass);
+        btnchangepassword = view.findViewById(R.id.btnchangepassword);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        dataUser = new ArrayList<>();
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fr_l, new FragmentProfile()).commit();
+                bnv.setVisibility(View.VISIBLE);
+                toolbar.setVisibility(View.VISIBLE);
+            }
+        });
+
+        btnchangepassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                daoUser = new DaoStore(getContext());
+                daoUser.getAll(new StoreCallback() {
+                    @Override
+                    public void onSuccess(ArrayList<Store> lists) {
+                        dataUser.clear();
+                        dataUser.addAll(lists);
+
+                    }
+
+                    @Override
+                    public void onError(String message) {
+
+                    }
+                });
+
+                if (edtoldpass.getText().toString().trim().isEmpty() || edtpassnew.getText().toString().trim().isEmpty() || edtxacnhanpass.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(getActivity(), "Vui Lòng Nhập Đầy Đủ 3 Trường", Toast.LENGTH_SHORT).show();
+                }
+                else if (edtoldpass.getText().toString().trim().length()<6 ||
+                        edtpassnew.getText().toString().trim().length()<6 || edtxacnhanpass.getText().toString().trim().length()<6){
+                    Toast.makeText(getActivity(), "Mật khẩu phải có ít nhất 6 ký tự!",
+                            Toast.LENGTH_SHORT).show();}
+                else {
+                    for (int i =0;i<dataUser.size();i++){
+                        if (dataUser.get(i).getTokenStore().equalsIgnoreCase(firebaseUser.getUid())){
+
+
+                            if (!(edtoldpass.getText().toString().trim().equalsIgnoreCase(dataUser.get(i).getPass()))){
+                                Toast.makeText(getActivity(), "Password cũ bạn nhập không đúng", Toast.LENGTH_SHORT).show();
+                            }else {
+                                pass = dataUser.get(i).getPass();
+                                name = dataUser.get(i).getName();
+                                phone = dataUser.get(i).getPhone();
+                                diachi = dataUser.get(i).getAddress();
+                                mail = dataUser.get(i).getEmail();
+                                anh = dataUser.get(i).getImage();
+
+                                if (edtpassnew.getText().toString().trim().equalsIgnoreCase(edtoldpass.getText().toString().trim())){
+                                    Toast.makeText(getActivity(), "Password cũ với password mới không được trùng", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    if (!(edtxacnhanpass.getText().toString().equalsIgnoreCase(edtpassnew.getText().toString()))) {
+                                        Toast.makeText(getActivity(), "Password Xác nhận phải trùng Với Password mới", Toast.LENGTH_SHORT).show();
+                                    } else {
+
+                                        Store user = new Store(mail,edtpassnew.getText().toString().trim(),name,phone,anh,diachi,null,firebaseUser.getUid());
+                                        daoUser.update(user);
+                                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                                        String newPassword = edtpassnew.getText().toString().trim();
+
+                                        firebaseUser.updatePassword(newPassword)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Toast.makeText(getContext(), "User password updated.", Toast.LENGTH_SHORT).show();}
+                                                    }
+                                                });
+                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fr_l, new FragmentProfile()).commit();
+                                        bnv.setVisibility(View.VISIBLE);
+                                        toolbar.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        });
+
+        return view;
     }
 }
